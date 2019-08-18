@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="多线程, 队列">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="生产者消费者模式并不是JAVA23种设计模式之一，23种设计模式都是建立在面向对象的基础之上的，但其实面向过程的编程中也有很多高效的编程模式，生产者消费者模式便是其中之一，它是我们编程过程中最常用的一种设计模式">
+<meta name="keywords" content="多线程, 队列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="生产者消费者模式">
+<meta property="og:url" content="http://yoursite.com/2017/04/25/生产者消费者模式/index.html">
+<meta property="og:site_name" content="张炎的个人博客">
+<meta property="og:description" content="生产者消费者模式并不是JAVA23种设计模式之一，23种设计模式都是建立在面向对象的基础之上的，但其实面向过程的编程中也有很多高效的编程模式，生产者消费者模式便是其中之一，它是我们编程过程中最常用的一种设计模式">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-18T10:53:53.715Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="生产者消费者模式">
+<meta name="twitter:description" content="生产者消费者模式并不是JAVA23种设计模式之一，23种设计模式都是建立在面向对象的基础之上的，但其实面向过程的编程中也有很多高效的编程模式，生产者消费者模式便是其中之一，它是我们编程过程中最常用的一种设计模式">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/25/生产者消费者模式/">
+
+
+
+
+
+  <title>生产者消费者模式 | 张炎的个人博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">张炎的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/25/生产者消费者模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张炎">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/person.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张炎的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">生产者消费者模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-25T00:21:02+08:00">
+                2017-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  生产者消费者模式并不是JAVA23种设计模式之一，23种设计模式都是建立在面向对象的基础之上的，但其实面向过程的编程中也有很多高效的编程模式，生产者消费者模式便是其中之一，它是我们编程过程中最常用的一种设计模式
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;生产者消费者模式并不是JAVA23种设计模式之一，23种设计模式都是建立在面向对象的基础之上的，但其实面向过程的编程中也有很多高效的编程模式，生产者消费者模式便是其中之一，它是我们编程过程中最常用的一种设计模式</p>
+<p>&emsp;&emsp;在我们平时的开发场景中,例如某个线程是生产数据,另一个线程是处理数据,如果俩者的速度存在较大的差异,生产数据很快,处理数据很慢,那么每生产一笔数据之后都要等待数据处理完才能再次生产,则会造成资源的浪费;再或者生产数据的时候出问题了甚至会中断整个流程。但是如果引入一个缓冲区概念用到生产者消费者模式就不一样了。生产的数据直接放到缓冲区里,缓冲区满之后则不再生产,处理数据的时候直接从缓冲区里面拿数据。这样做的好处有如下:</p>
+<ul>
+<li><p>解耦,就像生产者消费者俩个齿轮本来直接连接,现在引入第三个齿轮放入他们之间,他们分别与这个齿轮连接,就算将来生产或者消费者出问题也不至于整个轮子都挂掉。</p>
+</li>
+<li><p>支持忙闲不均,当生产者消费者俩者速度存在差异的时候,由于存在缓冲区,多生产的数据可以放在缓冲区里面等消费者慢慢来处理。例如现在的快递柜的存在,假设平常快递柜快递员可以一次拿走，但当双11的时候，快递柜爆满，则可以先放在柜子里面，等快递员分批消化。</p>
+</li>
+<li><p>支持并发,防止程序阻塞,例如生产数据必须在消费者消费完后再生产效率低下。就像邮局寄信一样如果没有邮筒你寄信就只能等邮递员来取,万一路上堵车呢你就傻傻的等在那里。造成时间的浪费。</p>
+</li>
+</ul>
+<p>&emsp;&emsp;好了废话不多说,直接撸代码,上文提到了缓冲区首先创建一个Box类当作缓冲区</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 生产者消费者模式当中的容器</span><br><span class="line"> * @author hspcadmin</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public class Box &#123;</span><br><span class="line">	private final int MaxNum = 5;//最大数量</span><br><span class="line">	</span><br><span class="line">	private static int CurrNum = 0;//当前数量</span><br><span class="line">	</span><br><span class="line">	private static Box box = null;</span><br><span class="line">	</span><br><span class="line">	private Box()&#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	/**</span><br><span class="line">	 * 单例模式保证效率且线程安全</span><br><span class="line">	 * @return</span><br><span class="line">	 */</span><br><span class="line">	public static Box getInstance()&#123;</span><br><span class="line">		if(box==null)&#123;</span><br><span class="line">			init();</span><br><span class="line">		&#125;</span><br><span class="line">		return box;</span><br><span class="line">	&#125;</span><br><span class="line">	private static synchronized void init()&#123;</span><br><span class="line">		if(box==null)&#123;</span><br><span class="line">			box = new Box();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	/**</span><br><span class="line">	 * 生产方法</span><br><span class="line">	 */</span><br><span class="line">	public synchronized void produce()&#123;</span><br><span class="line">		while(CurrNum==MaxNum)&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				System.out.println(&quot;仓库已满请等待消费者消费&quot;);</span><br><span class="line">				wait();//盒子满了之后等待消费者消费</span><br><span class="line">			&#125; catch (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		CurrNum++;</span><br><span class="line">		System.out.println(&quot;当前线程：&quot;+Thread.currentThread().getName() + &quot;--生产者生产了一个商品，当前库存量：&quot;+ CurrNum);</span><br><span class="line">		notifyAll();//通知消费者来消费</span><br><span class="line">	&#125;</span><br><span class="line">	/**</span><br><span class="line">	 * 消费方法</span><br><span class="line">	 */</span><br><span class="line">	public synchronized void consume()&#123;</span><br><span class="line">		while(CurrNum&lt;=0)&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				System.out.println(&quot;仓库已空请等待生产者生产&quot;);</span><br><span class="line">				wait();//盒子空了之后等待生产者生产</span><br><span class="line">			&#125; catch (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		CurrNum--;</span><br><span class="line">		System.out.println(&quot;当前线程：&quot;+Thread.currentThread().getName() + &quot;--消费者消费了一个商品，当前库存量：&quot;+ CurrNum);	</span><br><span class="line">		notifyAll();//通知生产者生产</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;接下来创建生产者类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class Producer extends Thread&#123;</span><br><span class="line">	@Override</span><br><span class="line">	public void run() &#123;</span><br><span class="line">		System.out.println(Thread.currentThread().getName() +&quot;***********生产者开始生产***********&quot;);</span><br><span class="line">		for(int j=0;j&lt;=10;j++)&#123;</span><br><span class="line">			Box.getInstance().produce();</span><br><span class="line">            try &#123;</span><br><span class="line">                Thread.sleep(500);</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;</span><br><span class="line">		System.out.println(Thread.currentThread().getName() +&quot;***********生产者结束生产***********&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;消费者类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class Consumer implements Runnable &#123;</span><br><span class="line">	@Override</span><br><span class="line">	public void run() &#123;</span><br><span class="line">		System.out.println(Thread.currentThread().getName() +&quot;***********消费者开始消费***********&quot;);</span><br><span class="line">		for(int j=0;j&lt;=8;j++)&#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                Thread.sleep(500);</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            Box.getInstance().consume();  </span><br><span class="line">        &#125;</span><br><span class="line">		System.out.println(Thread.currentThread().getName() +&quot;***********消费者结束消费***********&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;测试类以及结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">	public static void main(String args[]) throws Exception&#123;</span><br><span class="line">		Producer p = new Producer();</span><br><span class="line">		Consumer c = new Consumer();</span><br><span class="line">		p.start();</span><br><span class="line">		new Thread(c);</span><br><span class="line">		Thread.sleep(2000);//为了使结果展示层次更加清楚</span><br><span class="line">		new Thread(c).start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">Thread-0***********生产者开始生产***********</span><br><span class="line">当前线程：Thread-0--生产者生产了一个商品，当前库存量：1</span><br><span class="line">当前线程：Thread-0--生产者生产了一个商品，当前库存量：2</span><br><span class="line">当前线程：Thread-0--生产者生产了一个商品，当前库存量：3</span><br><span class="line">当前线程：Thread-0--生产者生产了一个商品，当前库存量：4</span><br><span class="line">Thread-2***********消费者开始消费***********</span><br><span class="line">当前线程：Thread-0--生产者生产了一个商品，当前库存量：5</span><br><span class="line">当前线程：Thread-2--消费者消费了一个商品，当前库存量：4</span><br><span class="line">当前线程：Thread-0--生产者生产了一个商品，当前库存量：5</span><br><span class="line">当前线程：Thread-2--消费者消费了一个商品，当前库存量：4</span><br><span class="line">当前线程：Thread-0--生产者生产了一个商品，当前库存量：5</span><br><span class="line">当前线程：Thread-2--消费者消费了一个商品，当前库存量：4</span><br><span class="line">当前线程：Thread-0--生产者生产了一个商品，当前库存量：5</span><br><span class="line">当前线程：Thread-2--消费者消费了一个商品，当前库存量：4</span><br><span class="line">当前线程：Thread-0--生产者生产了一个商品，当前库存量：5</span><br><span class="line">当前线程：Thread-2--消费者消费了一个商品，当前库存量：4</span><br><span class="line">当前线程：Thread-0--生产者生产了一个商品，当前库存量：5</span><br><span class="line">当前线程：Thread-2--消费者消费了一个商品，当前库存量：4</span><br><span class="line">当前线程：Thread-0--生产者生产了一个商品，当前库存量：5</span><br><span class="line">当前线程：Thread-2--消费者消费了一个商品，当前库存量：4</span><br><span class="line">Thread-0***********生产者结束生产***********</span><br><span class="line">当前线程：Thread-2--消费者消费了一个商品，当前库存量：3</span><br><span class="line">当前线程：Thread-2--消费者消费了一个商品，当前库存量：2</span><br><span class="line">Thread-2***********消费者结束消费***********</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/17/sql自定义函数(一)/" rel="next" title="sql自定义函数(一)">
+                <i class="fa fa-chevron-left"></i> sql自定义函数(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/person.jpg" alt="张炎">
+            
+              <p class="site-author-name" itemprop="name">张炎</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/zhangyan1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/5389169359" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.zhihu.com/people/zhang-yan-33-29-11" target="_blank" title="知乎">
+                      
+                        <i class="fa fa-fw fa-globe"></i>知乎</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">张炎</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
