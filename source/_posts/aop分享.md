@@ -13,7 +13,7 @@ AOP的本质是在一系列纵向的控制流程中，把那些相同的子流�
 <!--more--> 
 
 2. 单个切面执行顺序结果是什么？俩个切面重合的时候呢?  
-![uml类图](images/zzz.jpg)
+![uml类图](images/articleImage/actionOrder.jpg)
 
 3. jdk代理和cglib代理的区别?  
 jdk面向接口代理,不需要依赖第三方库  
@@ -23,16 +23,16 @@ cglib面向类代理,如果没有实现接口会选择cglib代理,效率更快
 特殊情况下可以生效,设置exposeProxy属性为true 暴露代理,调用的时候从上下文获取代理  
 
 ### 基础概念
-![基础概念思维导图](images/concept.png)
+![基础概念思维导图](images/articleImage/concept.png)
 
 ### springAop原理
 aop简版uml类图
-![uml类图](images/ccc.png)
+![uml类图](images/articleImage/uml.png)
 aop创建代理和方法执行流程图
-![流程图](images/333.png)
+![流程图](images/articleImage/proxyFloat.png)
 
 ### mybaties aop
-![mybaties uml](images/mybaties.png)
+![mybaties uml](images/articleImage/mybaties.png)
 * MapperRegistry:addMappers方法将包名下每个mapper类创建一个MapperProxyFactory,放入map中
 * MapperProxyFactory:创建一个mapperProxy代理类
 * MapperProxy:实现了InvocationHandler主要调用MapperMethod的execute
