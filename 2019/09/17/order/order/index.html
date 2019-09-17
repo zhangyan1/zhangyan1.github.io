@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="订单,支付,收银台,业务系统">
 
 
 
@@ -79,14 +79,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="categories">
-<meta property="og:url" content="http://yoursite.com/categories/index.html">
+<meta name="description" content="本系列文章从订单系统的演进,带你从0到1搭建订单系统,以及订单系统的迭代优化与支付系统和收银台系统的交互。完成从0搭建订单支付中心系统的设计。">
+<meta name="keywords" content="订单,支付,收银台,业务系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="订单系统设计">
+<meta property="og:url" content="http://yoursite.com/2019/09/17/order/order/index.html">
 <meta property="og:site_name" content="张炎的个人博客">
+<meta property="og:description" content="本系列文章从订单系统的演进,带你从0到1搭建订单系统,以及订单系统的迭代优化与支付系统和收银台系统的交互。完成从0搭建订单支付中心系统的设计。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-18T10:53:53.717Z">
+<meta property="og:updated_time" content="2019-09-17T12:09:07.049Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="categories">
+<meta name="twitter:title" content="订单系统设计">
+<meta name="twitter:description" content="本系列文章从订单系统的演进,带你从0到1搭建订单系统,以及订单系统的迭代优化与支付系统和收银台系统的交互。完成从0搭建订单支付中心系统的设计。">
 
 
 
@@ -116,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/">
+  <link rel="canonical" href="http://yoursite.com/2019/09/17/order/order/">
 
 
 
 
 
-  <title>categories | 张炎的个人博客</title>
+  <title>订单系统设计 | 张炎的个人博客</title>
   
 
 
@@ -247,33 +251,174 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/17/order/order/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张炎">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/person.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张炎的个人博客">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">categories</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
+          <h1 class="post-title" itemprop="name headline">订单系统设计</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-17T19:48:00+08:00">
+                2019-09-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-      </div>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/总结/" itemprop="url" rel="index">
+                    <span itemprop="name">总结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  本系列文章从订单系统的演进,带你从0到1搭建订单系统,以及订单系统的迭代优化与支付系统和收银台系统的交互。完成从0搭建订单支付中心系统的设计。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h3 id="订单系统设计"><a href="#订单系统设计" class="headerlink" title="订单系统设计"></a>订单系统设计</h3><p><a href>简易版订单系统</a><br><a href>订单之状态机</a><br><a href>订单分身之订单分表</a><br><a href>订单进化之以我为中心</a><br><a href>订单异常情况处理</a><br><a href>高并发订单系统的一些设想</a></p>
+<h3 id="支付系统设计"><a href="#支付系统设计" class="headerlink" title="支付系统设计"></a>支付系统设计</h3><h3 id="收银台系统设计"><a href="#收银台系统设计" class="headerlink" title="收银台系统设计"></a>收银台系统设计</h3>
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/订单/" rel="tag"># 订单</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/18/resume/" rel="next" title="简历">
+                <i class="fa fa-chevron-left"></i> 简历
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/17/order/easyOrder/" rel="prev" title="简易版订单系统">
+                简易版订单系统 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -306,8 +451,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -397,6 +551,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#订单系统设计"><span class="nav-number">1.</span> <span class="nav-text">订单系统设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支付系统设计"><span class="nav-number">2.</span> <span class="nav-text">支付系统设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#收银台系统设计"><span class="nav-number">3.</span> <span class="nav-text">收银台系统设计</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="aop,框架">
 
 
 
@@ -79,14 +79,24 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="categories">
-<meta property="og:url" content="http://yoursite.com/categories/index.html">
+<meta name="description" content="问题 面向切面编程的理解?AOP的本质是在一系列纵向的控制流程中，把那些相同的子流程提取成一个横向的面">
+<meta name="keywords" content="aop,框架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AOP基础及原理介绍">
+<meta property="og:url" content="http://yoursite.com/2019/04/17/aop分享/index.html">
 <meta property="og:site_name" content="张炎的个人博客">
+<meta property="og:description" content="问题 面向切面编程的理解?AOP的本质是在一系列纵向的控制流程中，把那些相同的子流程提取成一个横向的面">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-18T10:53:53.717Z">
+<meta property="og:image" content="http://yoursite.com/images/articleImage/actionOrder.jpg">
+<meta property="og:image" content="http://yoursite.com/images/articleImage/concept.png">
+<meta property="og:image" content="http://yoursite.com/images/articleImage/uml.png">
+<meta property="og:image" content="http://yoursite.com/images/articleImage/proxyFloat.png">
+<meta property="og:image" content="http://yoursite.com/images/articleImage/mybaties.png">
+<meta property="og:updated_time" content="2019-09-17T13:07:43.139Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="categories">
+<meta name="twitter:title" content="AOP基础及原理介绍">
+<meta name="twitter:description" content="问题 面向切面编程的理解?AOP的本质是在一系列纵向的控制流程中，把那些相同的子流程提取成一个横向的面">
+<meta name="twitter:image" content="http://yoursite.com/images/articleImage/actionOrder.jpg">
 
 
 
@@ -116,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/">
+  <link rel="canonical" href="http://yoursite.com/2019/04/17/aop分享/">
 
 
 
 
 
-  <title>categories | 张炎的个人博客</title>
+  <title>AOP基础及原理介绍 | 张炎的个人博客</title>
   
 
 
@@ -247,33 +257,199 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/17/aop分享/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张炎">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/person.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张炎的个人博客">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">categories</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
+          <h1 class="post-title" itemprop="name headline">AOP基础及原理介绍</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-17T00:21:02+08:00">
+                2019-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-      </div>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li>面向切面编程的理解?<br>AOP的本质是在一系列纵向的控制流程中，把那些相同的子流程提取成一个横向的面</li>
+</ol>
+<a id="more"></a> 
+
+<ol start="2">
+<li><p>单个切面执行顺序结果是什么？俩个切面重合的时候呢?<br><img src="/images/articleImage/actionOrder.jpg" alt="uml类图"></p>
+</li>
+<li><p>jdk代理和cglib代理的区别?<br>jdk面向接口代理,不需要依赖第三方库<br>cglib面向类代理,如果没有实现接口会选择cglib代理,效率更快  </p>
+</li>
+<li><p>aop同一个类里调用是否生效?<br>特殊情况下可以生效,设置exposeProxy属性为true 暴露代理,调用的时候从上下文获取代理  </p>
+</li>
+</ol>
+<h3 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h3><p><img src="/images/articleImage/concept.png" alt="基础概念思维导图"></p>
+<h3 id="springAop原理"><a href="#springAop原理" class="headerlink" title="springAop原理"></a>springAop原理</h3><p>aop简版uml类图<br><img src="/images/articleImage/uml.png" alt="uml类图"><br>aop创建代理和方法执行流程图<br><img src="/images/articleImage/proxyFloat.png" alt="流程图"></p>
+<h3 id="mybaties-aop"><a href="#mybaties-aop" class="headerlink" title="mybaties aop"></a>mybaties aop</h3><p><img src="/images/articleImage/mybaties.png" alt="mybaties uml"></p>
+<ul>
+<li>MapperRegistry:addMappers方法将包名下每个mapper类创建一个MapperProxyFactory,放入map中</li>
+<li>MapperProxyFactory:创建一个mapperProxy代理类</li>
+<li>MapperProxy:实现了InvocationHandler主要调用MapperMethod的execute</li>
+<li>MapperMethod:创建需要三个参数：DAO接口本身，方法类，Configuration对象 内部新建SqlCommand，MethodSignature俩个类</li>
+</ul>
+<h3 id="自己实现aop"><a href="#自己实现aop" class="headerlink" title="自己实现aop"></a>自己实现aop</h3><p>问题:自己实现一套类似于spring或者mybaties的aop 哪些类是必须的?</p>
+<ul>
+<li>创建代理类</li>
+<li>一个methodInvoce的实现类 当作拦截器</li>
+<li>过滤工具类 用来匹配切点</li>
+<li>解析xml或者注解的工具类</li>
+<li><a href="https://github.com/zhangyan1/circle" target="_blank" rel="noopener">详见代码</a></li>
+</ul>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/aop/" rel="tag"># aop</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/25/生产者消费者模式/" rel="next" title="生产者消费者模式">
+                <i class="fa fa-chevron-left"></i> 生产者消费者模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/18/resume/" rel="prev" title="简历">
+                简历 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -306,8 +482,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -397,6 +582,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基础概念"><span class="nav-number">1.1.</span> <span class="nav-text">基础概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#springAop原理"><span class="nav-number">1.2.</span> <span class="nav-text">springAop原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mybaties-aop"><span class="nav-number">1.3.</span> <span class="nav-text">mybaties aop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自己实现aop"><span class="nav-number">1.4.</span> <span class="nav-text">自己实现aop</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
