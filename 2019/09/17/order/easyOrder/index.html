@@ -87,10 +87,13 @@
 <meta property="og:site_name" content="张炎的个人博客">
 <meta property="og:description" content="前言 从事订单支付系统的设计研发已经接近俩年了,一直想好好把其中一些思考沉淀下来。一是回顾之前的设计,看看迭代过程中的一些思路是否合理,如果给自己从头再来的机会(不用考虑苦逼的兼容脏数据等等问题)能否设计得更好?二来自己一直想培养写博客的习惯,却从15年一直到现在都没有养成,希望从现在开始能坚持下来一步一步写下去(无论技术还是感悟),此系列文章算是个开头,希望这个开头不太难">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-17T13:02:19.695Z">
+<meta property="og:image" content="http://yoursite.com/images/orderImage/old.png">
+<meta property="og:image" content="http://yoursite.com/images/orderImage/old.png">
+<meta property="og:updated_time" content="2019-09-18T10:24:56.994Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="简易版订单系统">
 <meta name="twitter:description" content="前言 从事订单支付系统的设计研发已经接近俩年了,一直想好好把其中一些思考沉淀下来。一是回顾之前的设计,看看迭代过程中的一些思路是否合理,如果给自己从头再来的机会(不用考虑苦逼的兼容脏数据等等问题)能否设计得更好?二来自己一直想培养写博客的习惯,却从15年一直到现在都没有养成,希望从现在开始能坚持下来一步一步写下去(无论技术还是感悟),此系列文章算是个开头,希望这个开头不太难">
+<meta name="twitter:image" content="http://yoursite.com/images/orderImage/old.png">
 
 
 
@@ -292,7 +295,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-17T20:11:00+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-17T00:00:00+08:00">
                 2019-09-17
               </time>
             
@@ -357,7 +360,18 @@
 </ul>
 <a id="more"></a> 
 
-<h2 id="订单系统的思考"><a href="#订单系统的思考" class="headerlink" title="订单系统的思考"></a>订单系统的思考</h2><p>- </p>
+<h2 id="订单系统的思考"><a href="#订单系统的思考" class="headerlink" title="订单系统的思考"></a>订单系统的思考</h2><h3 id="订单系统的定位"><a href="#订单系统的定位" class="headerlink" title="订单系统的定位"></a>订单系统的定位</h3><ul>
+<li><p>传统模式中作为底层支撑系统是一个承上启下的位置,上游对接商品用户等业务系统,下游对接支付系统。由业务系统发起下单,下单成功之后再交由支付系统去支付。订单系统只提供底层支持,由商品业务系统控制流程。但当有多种业务系统时,代码非常容易冗余不容易维护,迭代成本往往也很高。<br><img src="/images/orderImage/old.png" alt="old"></p>
+</li>
+<li><p>改版后由订单作为中心系统控制订单流程,网关直接到订单系统,订单系统在下单之前,下单之后分别调用业务系统完成订单风控,以及订单通知<br><img src="/images/orderImage/old.png" alt="new"></p>
+<h3 id="订单系统需要完成的核心功能"><a href="#订单系统需要完成的核心功能" class="headerlink" title="订单系统需要完成的核心功能"></a>订单系统需要完成的核心功能</h3></li>
+<li><p>记录交易快照(留下凭证既订单记录)</p>
+</li>
+<li><p>订单状态流转(完成交易闭环,支付,退款,取消等等)</p>
+<h2 id="订单系统的架构"><a href="#订单系统的架构" class="headerlink" title="订单系统的架构"></a>订单系统的架构</h2></li>
+<li><p>简版订单设计如下图所示</p>
+</li>
+</ul>
 
       
     </div>
@@ -388,8 +402,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/17/order/order/" rel="next" title="订单系统设计">
-                <i class="fa fa-chevron-left"></i> 订单系统设计
+              <a href="/2019/08/18/resume/" rel="next" title="简历">
+                <i class="fa fa-chevron-left"></i> 简历
               </a>
             
           </div>
@@ -397,6 +411,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/17/order/order/" rel="prev" title="订单系统设计">
+                订单系统设计 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -558,7 +576,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#订单系统的思考"><span class="nav-number">2.</span> <span class="nav-text">订单系统的思考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#订单系统的思考"><span class="nav-number">2.</span> <span class="nav-text">订单系统的思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#订单系统的定位"><span class="nav-number">2.1.</span> <span class="nav-text">订单系统的定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#订单系统需要完成的核心功能"><span class="nav-number">2.2.</span> <span class="nav-text">订单系统需要完成的核心功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#订单系统的架构"><span class="nav-number">3.</span> <span class="nav-text">订单系统的架构</span></a></li></ol></div>
             
 
           </div>
