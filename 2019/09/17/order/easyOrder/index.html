@@ -88,8 +88,9 @@
 <meta property="og:description" content="前言 从事订单支付系统的设计研发已经接近俩年了,一直想好好把其中一些思考沉淀下来。一是回顾之前的设计,看看迭代过程中的一些思路是否合理,如果给自己从头再来的机会(不用考虑苦逼的兼容脏数据等等问题)能否设计得更好?二来自己一直想培养写博客的习惯,却从15年一直到现在都没有养成,希望从现在开始能坚持下来一步一步写下去(无论技术还是感悟),此系列文章算是个开头,希望这个开头不太难">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/orderImage/old.png">
-<meta property="og:image" content="http://yoursite.com/images/orderImage/old.png">
-<meta property="og:updated_time" content="2019-09-18T10:24:56.994Z">
+<meta property="og:image" content="http://yoursite.com/images/orderImage/new.png">
+<meta property="og:image" content="http://yoursite.com/images/orderImage/system.png">
+<meta property="og:updated_time" content="2019-09-18T13:22:25.030Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="简易版订单系统">
 <meta name="twitter:description" content="前言 从事订单支付系统的设计研发已经接近俩年了,一直想好好把其中一些思考沉淀下来。一是回顾之前的设计,看看迭代过程中的一些思路是否合理,如果给自己从头再来的机会(不用考虑苦逼的兼容脏数据等等问题)能否设计得更好?二来自己一直想培养写博客的习惯,却从15年一直到现在都没有养成,希望从现在开始能坚持下来一步一步写下去(无论技术还是感悟),此系列文章算是个开头,希望这个开头不太难">
@@ -361,16 +362,128 @@
 <a id="more"></a> 
 
 <h2 id="订单系统的思考"><a href="#订单系统的思考" class="headerlink" title="订单系统的思考"></a>订单系统的思考</h2><h3 id="订单系统的定位"><a href="#订单系统的定位" class="headerlink" title="订单系统的定位"></a>订单系统的定位</h3><ul>
-<li><p>传统模式中作为底层支撑系统是一个承上启下的位置,上游对接商品用户等业务系统,下游对接支付系统。由业务系统发起下单,下单成功之后再交由支付系统去支付。订单系统只提供底层支持,由商品业务系统控制流程。但当有多种业务系统时,代码非常容易冗余不容易维护,迭代成本往往也很高。<br><img src="/images/orderImage/old.png" alt="old"></p>
+<li><p>作为底层支撑系统是一个承上启下的位置,上游对接商品用户等业务系统,下游对接支付系统。由业务系统发起下单,下单成功之后再交由支付系统去支付。订单系统只提供底层支持,由商品业务系统控制流程。但当有多种业务系统时,代码非常容易冗余不容易维护,迭代成本往往也很高。<br><img src="/images/orderImage/old.png" alt="old"></p>
 </li>
-<li><p>改版后由订单作为中心系统控制订单流程,网关直接到订单系统,订单系统在下单之前,下单之后分别调用业务系统完成订单风控,以及订单通知<br><img src="/images/orderImage/old.png" alt="new"></p>
-<h3 id="订单系统需要完成的核心功能"><a href="#订单系统需要完成的核心功能" class="headerlink" title="订单系统需要完成的核心功能"></a>订单系统需要完成的核心功能</h3></li>
-<li><p>记录交易快照(留下凭证既订单记录)</p>
+<li><p>订单作为中心系统,控制订单流程,网关直接到订单系统,订单系统在下单之前,下单之后分别调用业务系统完成订单风控,以及订单通知,下单成功之后,后续支付流程完成交由支付系统来控制,订单和支付各自职能划分清楚.<br><img src="/images/orderImage/new.png" alt="new"></p>
 </li>
-<li><p>订单状态流转(完成交易闭环,支付,退款,取消等等)</p>
-<h2 id="订单系统的架构"><a href="#订单系统的架构" class="headerlink" title="订单系统的架构"></a>订单系统的架构</h2></li>
-<li><p>简版订单设计如下图所示</p>
-</li>
+</ul>
+<h3 id="订单系统核心功能-个人认为"><a href="#订单系统核心功能-个人认为" class="headerlink" title="订单系统核心功能 (个人认为)"></a>订单系统核心功能 (个人认为)</h3><ol>
+<li>记录交易快照(留下凭证既订单记录)</li>
+<li>订单状态流转(完成交易闭环,支付,退款,取消等等)</li>
+</ol>
+<h2 id="订单系统设计"><a href="#订单系统设计" class="headerlink" title="订单系统设计"></a>订单系统设计</h2><h3 id="订单设计-极简版本"><a href="#订单设计-极简版本" class="headerlink" title="订单设计(极简版本)"></a>订单设计(极简版本)</h3><p> <img src="/images/orderImage/system.png" alt="new"></p>
+<ul>
+<li>这是一个最基础的订单系统设计这里大致讲解每部分的作用</li>
+</ul>
+<ol>
+<li>统一风控主要做统一的下单前置校验（例如前端参数以及金额相关校验）</li>
+<li>统一金额处理可以处理优惠券分配，服务费，积分分配等等金额统一相关的部分</li>
+<li>配置该业务订单是否需要业务系统前置校验,三方校验，后置通知等等</li>
+<li>创建无效订单可以为后续提供幂等处理(订单号),以及减少失败后置处理</li>
+<li>订单后置处理如需要应该异步化完全和下单流程分割开来</li>
+<li>业务系统部分例如前置冻结库存，成功之后扣除库存通知用户等等</li>
+</ol>
+<h3 id="状态设计"><a href="#状态设计" class="headerlink" title="状态设计"></a>状态设计</h3><ul>
+<li>设计一个好的订单系统,前提肯定是要对状态归类,以及设计一套合适并且易于扩展迭代的订单状态,<a href>状态机</a>的部分我们留到下篇文章单独讲解，此处我们先简要介绍几种常用订单状态</li>
+</ul>
+<ol>
+<li>无效状态</li>
+<li>初始状态</li>
+<li>支付中状态</li>
+<li>支付成功状态</li>
+<li>交易完成状态</li>
+<li>退款状态</li>
+<li>异常关闭状态</li>
+</ol>
+<ul>
+<li>每种大业务类型的订单除了以上列出的主要状态外，肯定还会有各自的一系列子状态需要定义，一般各自的订单子状态不一致。此处定义枚举建议间隔（例如0初始状态,3支付中）方便后续扩展。</li>
+</ul>
+<h3 id="订单表设计"><a href="#订单表设计" class="headerlink" title="订单表设计"></a>订单表设计</h3><ul>
+<li>极简订单表结构</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>bigint</td>
+<td>自增主键id</td>
+</tr>
+<tr>
+<td>order_id</td>
+<td>varchar</td>
+<td>订单id内置部分订单信息（唯一键）</td>
+</tr>
+<tr>
+<td>parent_order_id</td>
+<td>varchar</td>
+<td>父订单id</td>
+</tr>
+<tr>
+<td>top_order_id</td>
+<td>varchar</td>
+<td>顶级订单id</td>
+</tr>
+<tr>
+<td>third_order_id</td>
+<td>varchar</td>
+<td>外部订单号</td>
+</tr>
+<tr>
+<td>order_price</td>
+<td>bigint</td>
+<td>单位分,订单金额</td>
+</tr>
+<tr>
+<td>order_status</td>
+<td>int</td>
+<td>订单状态</td>
+</tr>
+<tr>
+<td>order_sub_status</td>
+<td>int</td>
+<td>订单子状态</td>
+</tr>
+<tr>
+<td>biz_type</td>
+<td>int</td>
+<td>业务类型</td>
+</tr>
+<tr>
+<td>sub_biz_type</td>
+<td>int</td>
+<td>业务子类型</td>
+</tr>
+<tr>
+<td>version</td>
+<td>bigint</td>
+<td>版本号（乐观锁用到）</td>
+</tr>
+<tr>
+<td>extend</td>
+<td>text</td>
+<td>存入业务相关信息</td>
+</tr>
+<tr>
+<td>refund_price</td>
+<td>bigint</td>
+<td>退款金额</td>
+</tr>
+</tbody></table>
+<ul>
+<li>以上省略创建时间,更新时间,创建者id,姓名,更新者id,姓名等建表常规字段</li>
+<li>订单金额相关 肯定不止订单金额,退款金额俩部分。这里只考虑最简单的其它例如优惠金额,支付时间,结算时间等等省略</li>
+<li>业务相关信息后续<a href>分表</a>会讲到,这里先直接一个extend代替,例如存入商品信息,收货地址等等.</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>一个微型订单系统甚至只要一张订单表+状态机就能够搭建（<a href>订单状态机</a>）</li>
+<li>任何一个复杂的订单系统也是由微型订单系统扩展而来,搭建订单系统的时候，前期功能可以简单，但架构一定要分明,方便后续扩展。一个成熟的订单系统肯定都是由业务的不断演进不断迭代才越来越优秀。</li>
+<li>订单系统的一大难点在于操作的原子性,属于与用户交易打交道的第一道关口,任何异常以及细节都需要仔细考虑(<a href>订单异常情况处理</a>)</li>
 </ul>
 
       
@@ -576,7 +689,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#订单系统的思考"><span class="nav-number">2.</span> <span class="nav-text">订单系统的思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#订单系统的定位"><span class="nav-number">2.1.</span> <span class="nav-text">订单系统的定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#订单系统需要完成的核心功能"><span class="nav-number">2.2.</span> <span class="nav-text">订单系统需要完成的核心功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#订单系统的架构"><span class="nav-number">3.</span> <span class="nav-text">订单系统的架构</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#订单系统的思考"><span class="nav-number">2.</span> <span class="nav-text">订单系统的思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#订单系统的定位"><span class="nav-number">2.1.</span> <span class="nav-text">订单系统的定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#订单系统核心功能-个人认为"><span class="nav-number">2.2.</span> <span class="nav-text">订单系统核心功能 (个人认为)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#订单系统设计"><span class="nav-number">3.</span> <span class="nav-text">订单系统设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#订单设计-极简版本"><span class="nav-number">3.1.</span> <span class="nav-text">订单设计(极简版本)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态设计"><span class="nav-number">3.2.</span> <span class="nav-text">状态设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#订单表设计"><span class="nav-number">3.3.</span> <span class="nav-text">订单表设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
