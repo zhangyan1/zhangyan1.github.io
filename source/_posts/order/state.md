@@ -12,10 +12,12 @@ keywords: 订单,状态机,源码
 - 通过状态机,能够把状态流转的概念抽象出来,更符合java编程思想的规范
 - 状态机能够反映时序的布进控制
 
+<!--more--> 
+
 ### 基础概念
 
-	网络上关于状态机的定义有非常多的理论解释,在这里笔者仅仅按照自己的理解尽可能的简要描述
-	例如订单支付,订单由待支付状态(现态),执行了支付(事件),订单进行了状态更新(动作)最终变为已支付的状态(次态)就是一个完整的状态机流程
+- 网络上关于状态机的定义有非常多的理论解释,在这里笔者仅仅按照自己的理解尽可能的简要描述
+- 例如订单支付 订单由待支付状态(现态),执行了支付(事件),订单进行了状态更新(动作)最终变为已支付的状态(次态)就是一个完整的状态机流程
 
 ### 简要设计
 
@@ -26,7 +28,8 @@ keywords: 订单,状态机,源码
 - 其中每一步的事件流向也需要系统设计者因地制宜,笔者建议结合订单子状态对一些模糊状态进行区分,例如订单取消分为主动取消和被动取消,订单退款分为部分退款和全额退款等等
 
 ### 代码设计
-	秉着不重复造轮子的原则,笔者之前订单系统主要借鉴了hadoop yarn状态机的设计,并进行了一点小小的优化和封装。yarn状态机多弧过渡部分因为没有用到直接省略(感兴趣的同学可以自己去查看源码,笔者认为多弧过渡主要是次态的可选择性,但是反而增加了不确定性所以没有采用)接下来的部分主要是源码解析
+- 秉着不重复造轮子的原则,笔者之前订单系统主要借鉴了hadoop yarn状态机的设计,并进行了一点小小的优化和封装
+- yarn状态机多弧过渡部分因为没有用到直接省略(感兴趣的同学可以自己去查看源码,笔者认为多弧过渡主要是次态的可选择性,但是反而增加了不确定性所以没有采用)接下来的部分主要是源码解析
 
 - 状态机主要类图如下
 
@@ -59,8 +62,10 @@ private StateMachineFactory
   
 //
 private void makeStateMachineTable() {
+
+//创建堆栈 ApplicableTransition将此前链表的各个ApplicableTransition压入栈中
     Stack<ApplicableTransition<OPERAND, STATE, EVENTTYPE, EVENT>> stack =
-      new Stack<ApplicableTransition<OPERAND, STATE, EVENTTYPE, EVENT>>();//创建堆栈 ApplicableTransition将此前链表的各个ApplicableTransition压入栈中
+      new Stack<ApplicableTransition<OPERAND, STATE, EVENTTYPE, EVENT>>();
 
     Map<STATE, Map<EVENTTYPE, Transition<OPERAND, STATE, EVENTTYPE, EVENT>>>
       prototype = new HashMap<STATE, Map<EVENTTYPE, Transition<OPERAND, STATE, EVENTTYPE, EVENT>>>();
@@ -77,19 +82,22 @@ private void makeStateMachineTable() {
          cursor = cursor.next) {
       stack.push(cursor.transition);
     }
-
+ //apply方法就是完整构建拓扑表过程 此处简要描述 在拓扑表中找到当前订单状态的动作映射map,然后把动作放入此map中
     while (!stack.isEmpty()) {
       stack.pop().apply(this);
-      //apply方法就是完整构建拓扑表过程 此处简要描述 在拓扑表中找到当前订单状态的动作映射map,然后把动作放入此map中
+     
     }
   }
 ```
 
 - 应用层面代码
   ```java
-private static final StateMachineFactory<OrderRequest, OrderStatusEnum, OrderEvent.OrderEventEnum, OrderEvent> stateMachineFactory = new StateMachineFactory<OrderRequest, OrderStatusEnum, OrderEvent.OrderEventEnum, OrderEvent>(OrderStatusEnum.INVALID)//创建一个初始状态机
-.addTransition(OrderStatusEnum.INVALID, OrderStatusEnum.SUBMIT_ORDER, OrderEvent.OrderEventEnum.INIT_SUCCESS, new OrderInitTransition()) //调用私有构造方法 添加单弧事件去transitionsListNode
-         .installTopology();//构建拓扑表
+//创建一个初始状态机
+private static final StateMachineFactory<OrderRequest, OrderStatusEnum, OrderEvent.OrderEventEnum, OrderEvent> stateMachineFactory = new StateMachineFactory<OrderRequest, OrderStatusEnum, OrderEvent.OrderEventEnum, OrderEvent>(OrderStatusEnum.INVALID)
+//调用私有构造方法 添加单弧事件去transitionsListNode
+.addTransition(OrderStatusEnum.INVALID, OrderStatusEnum.SUBMIT_ORDER, OrderEvent.OrderEventEnum.INIT_SUCCESS, new OrderInitTransition()) 
+//构建拓扑表
+.installTopology();
   ```
 
 - 执行过程代码
@@ -110,8 +118,9 @@ private static final StateMachineFactory<OrderRequest, OrderStatusEnum, OrderEve
       Map<EVENTTYPE, Transition<OPERAND, STATE, EVENTTYPE, EVENT>> transitionMap
         = stateMachineTable.get(oldState);
       if (transitionMap != null) {
+      //根据事件找到具体动作
         Transition<OPERAND, STATE, EVENTTYPE, EVENT> transition
-            = transitionMap.get(eventType);//根据事件找到具体动作
+            = transitionMap.get(eventType);
         if (transition != null) {
         	//执行动作
           return transition.doTransition(operand, oldState, event, eventType);
