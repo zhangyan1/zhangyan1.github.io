@@ -133,4 +133,4 @@ private static final StateMachineFactory<OrderRequest, OrderStatusEnum, OrderEve
 
 
 
-- 主要核心代码大概就是上面这些,笔者主要是抛弃了多弧过渡,订单系统中可以优化单弧过渡执行方法时直接将次态带入自定义的transtion 这样可以将之前的多个transtion 合并
+- 主要核心代码大概就是上面这些,笔者主要是抛弃了多弧过渡,订单系统中可以优化单弧过渡执行方法时直接将次态带入自定义的transtion 这样可以将同类型的多个transtion 合并
