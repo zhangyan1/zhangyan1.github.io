@@ -88,7 +88,7 @@
 <meta property="og:description" content="意义 订单系统各种订单类型的流转，触发事件、执行事件如果不利用状态机代码会变得更加复杂且难以维护 通过状态机,能够把状态流转的概念抽象出来,更符合java编程思想的规范 状态机能够反映时序的布进控制">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/orderImage/state.png">
-<meta property="og:updated_time" content="2019-09-22T15:17:25.016Z">
+<meta property="og:updated_time" content="2019-09-23T08:13:30.424Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="订单之状态机">
 <meta name="twitter:description" content="意义 订单系统各种订单类型的流转，触发事件、执行事件如果不利用状态机代码会变得更加复杂且难以维护 通过状态机,能够把状态流转的概念抽象出来,更符合java编程思想的规范 状态机能够反映时序的布进控制">
@@ -386,7 +386,7 @@
 <li><p>执行过程代码</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">//将自定义request参数传入状态机,根据传入status为默认状态返回一个状态机。</span><br><span class="line">//如果拓扑表为构建会重新执行一遍构建过程</span><br><span class="line">orderStateMachine = OrderStateMachine.getStateMachine(request, OrderStatusEnum.getById(request.getOrderStatus()));</span><br><span class="line"></span><br><span class="line">//状态转移过程 返回次态</span><br><span class="line">orderStateMachine.doTransition(orderEvent.getOrderEvent(), orderEvent)</span><br><span class="line"></span><br><span class="line">//具体doTranstion方法</span><br><span class="line">private STATE doTransition</span><br><span class="line">           (OPERAND operand, STATE oldState, EVENTTYPE eventType, EVENT event)</span><br><span class="line">      throws InvalidStateTransitionException &#123;</span><br><span class="line">    //根据订单状态找到之前构建的map</span><br><span class="line">    Map&lt;EVENTTYPE, Transition&lt;OPERAND, STATE, EVENTTYPE, EVENT&gt;&gt; transitionMap</span><br><span class="line">      = stateMachineTable.get(oldState);</span><br><span class="line">    if (transitionMap != null) &#123;</span><br><span class="line">    //根据事件找到具体动作</span><br><span class="line">      Transition&lt;OPERAND, STATE, EVENTTYPE, EVENT&gt; transition</span><br><span class="line">          = transitionMap.get(eventType);</span><br><span class="line">      if (transition != null) &#123;</span><br><span class="line">      	//执行动作</span><br><span class="line">        return transition.doTransition(operand, oldState, event, eventType);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    throw new InvalidStateTransitionException(oldState, eventType);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>主要核心代码大概就是上面这些,笔者主要是抛弃了多弧过渡,订单系统中可以优化单弧过渡执行方法时直接将次态带入自定义的transtion 这样可以将之前的多个transtion 合并</p>
+<li><p>主要核心代码大概就是上面这些,笔者主要是抛弃了多弧过渡,订单系统中可以优化单弧过渡执行方法时直接将次态带入自定义的transition 这样可以将同类型的多个transition 合并</p>
 </li>
 </ul>
 
@@ -428,6 +428,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/23/order/order_sub_table/" rel="prev" title>
+                 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -506,7 +510,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
