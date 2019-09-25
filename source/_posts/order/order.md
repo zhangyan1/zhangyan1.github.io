@@ -8,8 +8,8 @@ description: 本系列文章从订单系统的演进,带你从0到1搭建订单�
 ---
 
 ### 订单系统设计
-[简易版订单系统]()
-[订单之状态机]()
+[简易版订单系统](https://zhangyan1.github.io/2019/09/17/order/easyOrder/#more)
+[订单之状态机](https://zhangyan1.github.io/2019/09/22/order/state/#more)
 [订单分身之订单分表]()
 [订单进化之以我为中心]()
 [订单异常情况处理]()
