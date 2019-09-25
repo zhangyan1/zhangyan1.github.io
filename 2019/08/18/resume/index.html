@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="张炎-3年-java 张炎/男/1994 手机：18390236566 Email：18390236566@163.com QQ/微信号：578033593 github：https://github.com/zhangyan1 博客：http://zhangyan1.github.io/ 学历：湖南科技大学/计算机科学与技术专业   技术文章 订单系统系列文章(https://zhangyan1">
+<meta name="description" content="张炎-3年-java 张炎/男/1994 手机：18390236566 Email：18390236566@163.com QQ/微信号：578033593 github：https://github.com/zhangyan1 博客：http://zhangyan1.github.io/ 学历：湖南科技大学/计算机科学与技术专业   技术文章 订单系列文章(https://zhangyan1.g">
 <meta name="keywords" content="简历">
 <meta property="og:type" content="article">
 <meta property="og:title" content="简历">
 <meta property="og:url" content="http://yoursite.com/2019/08/18/resume/index.html">
 <meta property="og:site_name" content="张炎的个人博客">
-<meta property="og:description" content="张炎-3年-java 张炎/男/1994 手机：18390236566 Email：18390236566@163.com QQ/微信号：578033593 github：https://github.com/zhangyan1 博客：http://zhangyan1.github.io/ 学历：湖南科技大学/计算机科学与技术专业   技术文章 订单系统系列文章(https://zhangyan1">
+<meta property="og:description" content="张炎-3年-java 张炎/男/1994 手机：18390236566 Email：18390236566@163.com QQ/微信号：578033593 github：https://github.com/zhangyan1 博客：http://zhangyan1.github.io/ 学历：湖南科技大学/计算机科学与技术专业   技术文章 订单系列文章(https://zhangyan1.g">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-25T11:25:31.941Z">
+<meta property="og:updated_time" content="2019-09-25T11:33:26.262Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="简历">
-<meta name="twitter:description" content="张炎-3年-java 张炎/男/1994 手机：18390236566 Email：18390236566@163.com QQ/微信号：578033593 github：https://github.com/zhangyan1 博客：http://zhangyan1.github.io/ 学历：湖南科技大学/计算机科学与技术专业   技术文章 订单系统系列文章(https://zhangyan1">
+<meta name="twitter:description" content="张炎-3年-java 张炎/男/1994 手机：18390236566 Email：18390236566@163.com QQ/微信号：578033593 github：https://github.com/zhangyan1 博客：http://zhangyan1.github.io/ 学历：湖南科技大学/计算机科学与技术专业   技术文章 订单系列文章(https://zhangyan1.g">
 
 
 
@@ -341,12 +341,13 @@
 </ul>
 <hr>
 <h2 id="技术文章"><a href="#技术文章" class="headerlink" title="技术文章"></a>技术文章</h2><ul>
-<li>订单系统系列文章(<a href="https://zhangyan1.github.io/2019/09/17/order/order/" target="_blank" rel="noopener">https://zhangyan1.github.io/2019/09/17/order/order/</a>)</li>
+<li>订单系列文章(<a href="https://zhangyan1.github.io/2019/09/17/order/order/" target="_blank" rel="noopener">https://zhangyan1.github.io/2019/09/17/order/order/</a>)</li>
 <li>springAop详解（<a href="https://zhangyan1.github.io/2019/04/17/aop%E5%88%86%E4%BA%AB/#more）" target="_blank" rel="noopener">https://zhangyan1.github.io/2019/04/17/aop%E5%88%86%E4%BA%AB/#more）</a></li>
 </ul>
 <a id="more"></a> 
 <h1 id="项目经验"><a href="#项目经验" class="headerlink" title="项目经验"></a>项目经验</h1><h2 id="浙江讯盟科技有限公司-2017-05-至今"><a href="#浙江讯盟科技有限公司-2017-05-至今" class="headerlink" title="浙江讯盟科技有限公司 (2017/05-至今)"></a>浙江讯盟科技有限公司 (2017/05-至今)</h2><h3 id="订单支付系统设计以及迭代"><a href="#订单支付系统设计以及迭代" class="headerlink" title="订单支付系统设计以及迭代"></a>订单支付系统设计以及迭代</h3><ul>
-<li>业务描述:支撑移动彩云企业服务tab页,各种应用所产生的订单以及支付请求（例滴滴出行,同城旅游,美团外卖,京东等十多个业务系统的订单）</li>
+<li>系统描述:分布式订单系统主要采用springboot搭建基础应用,应用间通信采用公司自研aace进行通信(rpc框架)</li>
+<li>系统描述:支撑移动彩云企业服务tab页,各种应用所产生的订单以及支付请求（例滴滴出行,同城旅游,美团外卖,京东等十多个业务系统的订单）</li>
 <li>架构描述:主要由订单中心,支付中心,收银台三部分组成,内部经由rpc框架调用,对于单次原子操作保证交易的最终一致性(分布式事物,mq等方式)</li>
 <li>功能描述:由订单中心统一控制下单逻辑,业务系统负责业务校验以及订单后置处理,订单成功之后交由支付系统处理支付请求(支付方式包括,现金,企业支付,积分彩豆优惠券等等),<br>涉及外部支付的会唤醒收银台完成一次闭环操作</li>
 <li>职责描述:项目主程。订单系统的设计,数据库表结构设计,各种异常场景的考虑。系统主要设计到技术(springboot,redis,rpc,es,rcoketMq)</li>
@@ -392,7 +393,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/17/aop分享/" rel="next" title="AOP基础及原理介绍">
+              <a href="/2019/04/17/aopShare/" rel="next" title="AOP基础及原理介绍">
                 <i class="fa fa-chevron-left"></i> AOP基础及原理介绍
               </a>
             
