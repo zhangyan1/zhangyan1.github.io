@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://yoursite.com/images/orderImage/biz.png">
 <meta property="og:image" content="http://yoursite.com/images/orderImage/pay_biz.png">
 <meta property="og:image" content="http://yoursite.com/images/orderImage/sys.png">
-<meta property="og:updated_time" content="2019-09-27T09:17:05.299Z">
+<meta property="og:updated_time" content="2019-09-27T09:45:07.852Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="订单系统分表">
 <meta name="twitter:description" content="前言从之前文章了解到一个简单的订单系统订单数据只需要一张简单的订单表就能够搞定,但随着业务的发展,单表会变得会越来越臃肿,越来越不容易维护。此时我们就需要对订单进行分表操作(注意此处的分表仅仅是业务层面的分表,不涉及高并发)。来方便日后订单系统的迭代开发。与订单中心交互最多的自然是业务系统和支付系统。接下来这篇文章带你如何切割订单表结构。">
@@ -356,7 +356,8 @@
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><pre><code>从之前文章了解到一个简单的订单系统订单数据只需要一张简单的订单表就能够搞定,但随着业务的发展,单表会变得会越来越臃肿,越来越不容易维护。此时我们就需要对订单进行分表操作(注意此处的分表仅仅是业务层面的分表,不涉及高并发)。来方便日后订单系统的迭代开发。与订单中心交互最多的自然是业务系统和支付系统。接下来这篇文章带你如何切割订单表结构。</code></pre><a id="more"></a> 
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>从之前文章了解到一个简单的订单系统订单数据只需要一张简单的订单表就能够搞定,但随着业务的发展,单表会变得会越来越臃肿,越来越不容易维护。此时我们就需要对订单进行分表操作(注意此处的分表仅仅是业务层面的分表,不涉及高并发)。来方便日后订单系统的迭代开发。与订单中心交互最多的自然是业务系统和支付系统。接下来这篇文章带你如何切割订单表结构。</p>
+<a id="more"></a> 
 <h3 id="业务分表"><a href="#业务分表" class="headerlink" title="业务分表"></a>业务分表</h3><ul>
 <li>我们设计订单表结构的时候,存入订单快照一般有俩种方式,第一种如之前所说的简易版本放入一个extend字段,但这样会极其不利于查询和统计,例如你要按商品维度,或者收货地址等等业务属性去查询订单的时候会直接让你崩溃,如果单独存入表字段那后续如果查询的条件越来越多,例如商品可能有商品名称,火车票有车次,飞机票有航班等等,那只会让你的表结构变得越来越庞大直至你变得难以忍受。既然这样我们可以设计订单系统的时候为何不直接将订单,将它的业务属性和基础属性分开如下图一样<br><img src="/images/orderImage/biz.png" alt="biz"></li>
 <li>基础订单根据orderType将订单分为几大类,每一类业务订单表结构基本一致。各类业务之间互不影响,用时下的职场话说,就是把订单表扁平化管理,基础订单是领导,下面各类业务订单表是小弟,每个小弟无论是扩展还是更新都对其它的不会有影响</li>
