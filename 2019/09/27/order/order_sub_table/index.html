@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="订单,支付,收银台,业务系统">
 
 
 
@@ -79,14 +79,22 @@
 
 
 
+<meta name="description" content="前言从之前文章了解到一个简单的订单系统订单数据只需要一张简单的订单表就能够搞定,但随着业务的发展,单表会变得会越来越臃肿,越来越不容易维护。此时我们就需要对订单进行分表操作(注意此处的分表仅仅是业务层面的分表,不涉及高并发)。来方便日后订单系统的迭代开发。与订单中心交互最多的自然是业务系统和支付系统。接下来这篇文章带你如何切割订单表结构。业务分表 我们设计订单表结构的时候,存入订单快照一般有俩种方">
+<meta name="keywords" content="订单,支付,收银台,业务系统">
 <meta property="og:type" content="article">
-<meta property="og:title" content="张炎的个人博客">
-<meta property="og:url" content="http://yoursite.com/2019/09/23/order/order_sub_table/index.html">
+<meta property="og:title" content="订单系统分表">
+<meta property="og:url" content="http://yoursite.com/2019/09/27/order/order_sub_table/index.html">
 <meta property="og:site_name" content="张炎的个人博客">
+<meta property="og:description" content="前言从之前文章了解到一个简单的订单系统订单数据只需要一张简单的订单表就能够搞定,但随着业务的发展,单表会变得会越来越臃肿,越来越不容易维护。此时我们就需要对订单进行分表操作(注意此处的分表仅仅是业务层面的分表,不涉及高并发)。来方便日后订单系统的迭代开发。与订单中心交互最多的自然是业务系统和支付系统。接下来这篇文章带你如何切割订单表结构。业务分表 我们设计订单表结构的时候,存入订单快照一般有俩种方">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-23T06:24:02.431Z">
+<meta property="og:image" content="http://yoursite.com/images/orderImage/biz.png">
+<meta property="og:image" content="http://yoursite.com/images/orderImage/pay_biz.png">
+<meta property="og:image" content="http://yoursite.com/images/orderImage/sys.png">
+<meta property="og:updated_time" content="2019-09-27T09:11:54.776Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张炎的个人博客">
+<meta name="twitter:title" content="订单系统分表">
+<meta name="twitter:description" content="前言从之前文章了解到一个简单的订单系统订单数据只需要一张简单的订单表就能够搞定,但随着业务的发展,单表会变得会越来越臃肿,越来越不容易维护。此时我们就需要对订单进行分表操作(注意此处的分表仅仅是业务层面的分表,不涉及高并发)。来方便日后订单系统的迭代开发。与订单中心交互最多的自然是业务系统和支付系统。接下来这篇文章带你如何切割订单表结构。业务分表 我们设计订单表结构的时候,存入订单快照一般有俩种方">
+<meta name="twitter:image" content="http://yoursite.com/images/orderImage/biz.png">
 
 
 
@@ -116,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/09/23/order/order_sub_table/">
+  <link rel="canonical" href="http://yoursite.com/2019/09/27/order/order_sub_table/">
 
 
 
 
 
-  <title> | 张炎的个人博客</title>
+  <title>订单系统分表 | 张炎的个人博客</title>
   
 
 
@@ -259,7 +267,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/23/order/order_sub_table/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/27/order/order_sub_table/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="张炎">
@@ -276,7 +284,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">订单系统分表</h1>
         
 
         <div class="post-meta">
@@ -288,8 +296,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-23T14:24:02+08:00">
-                2019-09-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-27T00:00:00+08:00">
+                2019-09-27
               </time>
             
 
@@ -298,6 +306,28 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计/" itemprop="url" rel="index">
+                    <span itemprop="name">设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -326,7 +356,21 @@
       
 
       
-        
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><pre><code>从之前文章了解到一个简单的订单系统订单数据只需要一张简单的订单表就能够搞定,但随着业务的发展,单表会变得会越来越臃肿,越来越不容易维护。此时我们就需要对订单进行分表操作(注意此处的分表仅仅是业务层面的分表,不涉及高并发)。来方便日后订单系统的迭代开发。与订单中心交互最多的自然是业务系统和支付系统。接下来这篇文章带你如何切割订单表结构。</code></pre><h3 id="业务分表"><a href="#业务分表" class="headerlink" title="业务分表"></a>业务分表</h3><ul>
+<li>我们设计订单表结构的时候,存入订单快照一般有俩种方式,第一种如之前所说的简易版本放入一个extend字段,但这样会极其不利于查询和统计,例如你要按商品维度,或者收货地址等等业务属性去查询订单的时候会直接让你崩溃,如果单独存入表字段那后续如果查询的条件越来越多,例如商品可能有商品名称,火车票有车次,飞机票有航班等等,那只会让你的表结构变得越来越庞大直至你变得难以忍受。既然这样我们可以设计订单系统的时候为何不直接将订单,将它的业务属性和基础属性分开如下图一样<br><img src="/images/orderImage/biz.png" alt="biz"></li>
+<li>基础订单根据orderType将订单分为几大类,每一类业务订单表结构基本一致。各类业务之间互不影响,用时下的职场话说,就是把订单表扁平化管理,基础订单是领导,下面各类业务订单表是小弟,每个小弟无论是扩展还是更新都对其它的不会有影响</li>
+<li>订单查询时用宽表查询,订单插入和更新时订单系统要保证同步更新</li>
+<li>如果业务用户量够大可以考虑按照表结构把订单系统拆分,底层业务系统处理基础的状态变换,数据更新,业务订单系统专门对接业务系统以及控制流程。</li>
+</ul>
+<h3 id="金额类分表"><a href="#金额类分表" class="headerlink" title="金额类分表"></a>金额类分表</h3><ul>
+<li>订单除了记订单本身的属性和业务属性之外,金额属性也是必不可少的一环,例如支付金额,退款金额等等，当你的订单支付方式变多，你可能会要增加支付渠道,支付方式字段,当订单支持积分等下单时优惠类金额时你可能也需要记录,当订单支持优惠券支付时优惠金额时你可能又要记录。把订单金额类信息拆分出来专门对接支付系统是十分有必要的<br><img src="/images/orderImage/pay_biz.png" alt="pay"></li>
+<li>这样订单基础信息表会变得更加纯粹,支付后与支付系统的交互也会变得更加干净,能更方便查询订单支付类信息。</li>
+<li>同样查询时也可以宽表查询,但笔者不建议,对于高频的订单列表接口一般列表只需要展示一个订单金额就够了,查询详情时再进行金额订单类信息查询。当然如果其它系统对订单系统有类似需求,也可以提供一个宽表查询的接口</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>本篇文章主要介绍了订单的分表,对基础表订单进行了调整,其实当表结构发生变更时,一般系统架构也会发生变更。例如订单集群分为底层订单和业务订单部分,根据每条业务线不同的流水量去决定服务的资源。例如订单和支付中心的交互模式都需要变换。笔者这里借用以前的一张图分表之后整个模块可以这样设计。<br><img src="/images/orderImage/sys.png" alt="sys"></li>
+</ul>
+
       
     </div>
     
@@ -340,6 +384,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/订单/" rel="tag"># 订单</a>
+          
+        </div>
       
 
       
@@ -410,8 +460,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -501,6 +560,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#业务分表"><span class="nav-number">2.</span> <span class="nav-text">业务分表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#金额类分表"><span class="nav-number">3.</span> <span class="nav-text">金额类分表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
