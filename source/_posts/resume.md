@@ -17,7 +17,7 @@ keywords: 简历
 ---
 
 ## 技术文章
-- 订单系列文章(https://zhangyan1.github.io/2019/09/17/order/order/)
+- 订单系列文章(https://juejin.im/post/5d8eb8fc6fb9a04ddd42df93)
 - springAop详解（https://zhangyan1.github.io/2019/04/17/aop/#more）
 
 
